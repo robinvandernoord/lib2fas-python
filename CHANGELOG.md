@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.1 (2024-01-29)
+
+### Fix
+
+* **load_services:** Made `passphrase` option as shown in the docs actually work ([`1ff6694`](https://github.com/robinvandernoord/lib2fas-python/commit/1ff6694e0e287768b5a8aad57e8b86993d65864c))
+
 ## v0.1.0 (2024-01-29)
 
 ### Feature
