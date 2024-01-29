@@ -1,0 +1,122 @@
+{
+  "services": [
+    {
+      "name": "Example 1",
+      "secret": "N5LVC5JZNVVDSUZPJFIWUZSHGFDGMZJU",
+      "updatedAt": 1705504078693,
+      "otp": {
+        "link": "otpauth://totp/Ledgy:Elon Must?secret=N5LVC5JZNVVDSUZPJFIWUZSHGFDGMZJU&issuer=Ledgy",
+        "label": "Additional Info",
+        "account": "Additional Info",
+        "issuer": "Ledgy",
+        "tokenType": "TOTP",
+        "source": "Link"
+      },
+      "order": {
+        "position": 0
+      },
+      "icon": {
+        "selected": "IconCollection",
+        "label": {
+          "text": "LE",
+          "backgroundColor": "Orange"
+        },
+        "iconCollection": {
+          "id": "4d15f4f2-0c7e-41b1-a9af-be07644246c1"
+        }
+      }
+    },
+    {
+      "name": "Example 1",
+      "secret": "JBSWY3DPEHPK3PXP",
+      "updatedAt": 1705504116783,
+      "otp": {
+        "link": "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
+        "label": "Other Additional Info",
+        "account": "Other Additional Info",
+        "issuer": "Example",
+        "tokenType": "TOTP",
+        "source": "Link"
+      },
+      "order": {
+        "position": 1
+      },
+      "icon": {
+        "selected": "IconCollection",
+        "label": {
+          "text": "EX",
+          "backgroundColor": "Red"
+        },
+        "iconCollection": {
+          "id": "66190b0f-9600-4a6f-b06b-33254b5316ad"
+        }
+      }
+    },
+    {
+      "name": "Example 2",
+      "secret": "JBSWY3DPEHPK3PXW",
+      "updatedAt": 1705504161885,
+      "otp": {
+        "link": "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXW&issuer=Example",
+        "label": "alice@google",
+        "account": "alice@google",
+        "issuer": "Example",
+        "tokenType": "TOTP",
+        "source": "Link"
+      },
+      "order": {
+        "position": 2
+      },
+      "icon": {
+        "selected": "IconCollection",
+        "label": {
+          "text": "EX",
+          "backgroundColor": "Purple"
+        },
+        "iconCollection": {
+          "id": "7d7c381b-7feb-4155-991f-074ae53e6bd9"
+        }
+      }
+    },
+    {
+      "name": "Example 3",
+      "secret": "XBSWY3DPEHPK3PXW",
+      "updatedAt": 1705504197926,
+      "otp": {
+        "link": "otpauth://totp/Example 3:Example in Folder?secret=XBSWY3DPEHPK3PXW&issuer=Example 3",
+        "label": "Example in Folder",
+        "account": "Example in Folder",
+        "issuer": "Example 3",
+        "tokenType": "TOTP",
+        "source": "Link"
+      },
+      "order": {
+        "position": 3
+      },
+      "icon": {
+        "selected": "Label",
+        "label": {
+          "text": "EX",
+          "backgroundColor": "Pink"
+        },
+        "iconCollection": {
+          "id": "a5b3fb65-4ec5-43e6-8ec1-49e24ca9e7ad"
+        }
+      },
+      "groupId": "8ea6c261-e88e-4cb8-951c-001786d144bc"
+    }
+  ],
+  "groups": [
+    {
+      "id": "8ea6c261-e88e-4cb8-951c-001786d144bc",
+      "name": "Folder 1",
+      "isExpanded": true,
+      "updatedAt": 1705504169176
+    }
+  ],
+  "updatedAt": 1705504226186,
+  "schemaVersion": 4,
+  "appVersionCode": 5000012,
+  "appVersionName": "5.2.0",
+  "appOrigin": "android"
+}
