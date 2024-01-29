@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.2 (2024-01-29)
+
+### Fix
+
+* **deps:** Remove cli-related dependencies ([`b2d0cce`](https://github.com/robinvandernoord/lib2fas-python/commit/b2d0cce1b0fc7eb347d5391a33d8bef07ebd5611))
+
 ## v0.1.1 (2024-01-29)
 
 ### Fix
