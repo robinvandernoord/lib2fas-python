@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.0 (2024-01-29)
+
+### Feature
+
+* Moved library code from 2fas to lib2fas ([`e4be2b7`](https://github.com/robinvandernoord/lib2fas-python/commit/e4be2b7303e92db4aad60fc51022dfaea96ad3ca))
+
 ## v0.1.0 (2024-01-25)
 
 ### Feature
