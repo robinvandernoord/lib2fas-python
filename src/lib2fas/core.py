@@ -163,10 +163,21 @@ def new_auth_storage(initial_items: list[T_TwoFactorAuthDetails] = None) -> TwoF
     return storage
 
 
-def load_services(filename: str, _max_retries: int = 0) -> TwoFactorStorage[TwoFactorAuthDetails]:
+def load_services(
+    filename: str, _max_retries: int = 0, passphrase: Optional[str] = None
+) -> TwoFactorStorage[TwoFactorAuthDetails]:
     """
     Given a 2fas file, try to decrypt it (via stored password in keyring or by querying user) \
      and load into a TwoFactorStorage object.
+
+     Args:
+         filename: Path to a .2fas file
+         _max_retries: how many password guesses are allowed? (default = unlimited)
+         passphrase: password for the supplied 2fas file; leave empty to query the user.
+            Note: when using the passphrase option, _max_retries is ignored and the keyring is not used.
+
+    Raises:
+         PermissionError on invalid password.
     """
     filepath = Path(filename).expanduser()
     with filepath.open() as f:
@@ -182,17 +193,23 @@ def load_services(filename: str, _max_retries: int = 0) -> TwoFactorStorage[TwoF
 
     encrypted = data["servicesEncrypted"]
 
-    retries = 0
-    while True:
-        password = keyring_manager.retrieve_credentials(filename) or keyring_manager.save_credentials(filename)
-        try:
-            entries = decrypt(encrypted, password)
-            storage.add(entries)
-            return storage
-        except PermissionError as e:
-            retries += 1  # only really useful for pytest
-            print(e, file=sys.stderr)
-            keyring_manager.delete_credentials(filename)
+    if passphrase is not None:
+        # could raise PermissionError
+        entries = decrypt(encrypted, passphrase)
+        storage.add(entries)
+        return storage
+    else:
+        retries = 0
+        while True:
+            password = keyring_manager.retrieve_credentials(filename) or keyring_manager.save_credentials(filename)
+            try:
+                entries = decrypt(encrypted, password)
+                storage.add(entries)
+                return storage
+            except PermissionError as e:
+                retries += 1  # only really useful for pytest
+                print(e, file=sys.stderr)
+                keyring_manager.delete_credentials(filename)
 
-            if _max_retries and retries > _max_retries:
-                raise e
+                if _max_retries and retries > _max_retries:
+                    raise e

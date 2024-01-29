@@ -43,13 +43,21 @@ def test_wrong_pass(getpass_wrong):
         assert not load_services(FILENAME, _max_retries=1)
 
 
+def test_pass_noninteractive(getpass_wrong):
+    with pytest.raises(PermissionError):
+        assert not load_services(FILENAME, _max_retries=1, passphrase="")
+
+    services = load_services(FILENAME, _max_retries=1, passphrase=PASSWORD)
+    assert services
+
+
 def test_right_pass(getpass_correct):
     services = load_services(FILENAME)
     assert services
 
 
 def test_from_keyring(getpass_empty):
-    # note: `test_right_pass` MUST be executed before!
+    # note: `test_right_pass` MUST be executed right before!
     services = load_services(FILENAME, _max_retries=1)
     assert services
 
