@@ -22,13 +22,12 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
+
 dependencies = [
     "cryptography",
     "configuraptor>=1.25",
     "PyOTP",
     "keyring",
-    "typer[all]",
-    "questionary",
     "rapidfuzz",
 ]
 
