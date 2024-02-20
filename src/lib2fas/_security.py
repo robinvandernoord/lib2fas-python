@@ -7,6 +7,7 @@ import getpass
 import hashlib
 import json
 import logging
+import tempfile
 import time
 import warnings
 from pathlib import Path
@@ -77,7 +78,7 @@ class KeyringManager:
     """
 
     appname: str = ""
-    tmp_file = Path("/tmp") / ".2fas"
+    tmp_file = Path(tempfile.gettempdir()) / ".2fas"
 
     def __init__(self) -> None:
         """
