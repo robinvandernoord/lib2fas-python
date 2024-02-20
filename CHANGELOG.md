@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.3 (2024-02-20)
+
+### Fix
+
+* Revert linting changes to fixtures in 'tests' ([`8c717f5`](https://github.com/robinvandernoord/lib2fas-python/commit/8c717f5af25b9bea379aed2d6ee795b7cc5f7e36))
+
 ## v0.1.2 (2024-01-29)
 
 ### Fix
