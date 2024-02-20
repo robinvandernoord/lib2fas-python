@@ -21,13 +21,13 @@ def clean_keyring():
 
 
 @pytest.fixture
-def getpass_wrong(clean_keyring, monkeypatch):
+def getpass_wrong(_clean_keyring, monkeypatch):
     """Did the file we wrote actually become json."""
     monkeypatch.setattr("getpass.getpass", lambda _: "***")
 
 
 @pytest.fixture
-def getpass_correct(clean_keyring, monkeypatch):
+def getpass_correct(_clean_keyring, monkeypatch):
     """Did the file we wrote actually become json."""
     monkeypatch.setattr("getpass.getpass", lambda _: PASSWORD)
 
@@ -38,12 +38,12 @@ def getpass_empty(monkeypatch):
     monkeypatch.setattr("getpass.getpass", lambda _: "")
 
 
-def test_wrong_pass(getpass_wrong):
+def test_wrong_pass(_getpass_wrong):
     with pytest.raises(PermissionError):
         assert not load_services(FILENAME, _max_retries=1)
 
 
-def test_pass_noninteractive(getpass_wrong):
+def test_pass_noninteractive(_getpass_wrong):
     with pytest.raises(PermissionError):
         assert not load_services(FILENAME, _max_retries=1, passphrase="")
 
@@ -51,12 +51,12 @@ def test_pass_noninteractive(getpass_wrong):
     assert services
 
 
-def test_right_pass(getpass_correct):
+def test_right_pass(_getpass_correct):
     services = load_services(FILENAME)
     assert services
 
 
-def test_from_keyring(getpass_empty):
+def test_from_keyring(_getpass_empty):
     # note: `test_right_pass` MUST be executed right before!
     services = load_services(FILENAME, _max_retries=1)
     assert services

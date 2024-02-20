@@ -147,7 +147,9 @@ ignore = [
 # bandit -c pyproject.toml -r .
 exclude_dirs = [".bak", "venv"]
 skips = [
-    "B108"  # hard coded /tmp/... files are fine for me tbh
+    "B101", # Use of assert detected.
+    "B105", # hardcoded_password_string
+    "B106", # hardcoded_password_funcarg
 ]
 
 [tool.isort]
