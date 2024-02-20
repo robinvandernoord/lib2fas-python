@@ -6,6 +6,7 @@
 
 ### Fix
 
+* Use tempfile to get temp dir, rather than assuming /tmp ([`b42ebc2`](https://github.com/robinvandernoord/lib2fas-python/commit/b42ebc22d49c9168b8e4c632141d486c04192210) by [@crmarsh](https://github.com/crmarsh))
 * Revert linting changes to fixtures in 'tests' ([`8c717f5`](https://github.com/robinvandernoord/lib2fas-python/commit/8c717f5af25b9bea379aed2d6ee795b7cc5f7e36))
 
 ## v0.1.2 (2024-01-29)
