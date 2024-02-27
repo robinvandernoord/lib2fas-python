@@ -5,7 +5,6 @@ This file deals with the 2fas encryption and keyring integration.
 import base64
 import getpass
 import hashlib
-import json
 import logging
 import tempfile
 import time
@@ -16,6 +15,7 @@ from typing import Any, Optional
 import cryptography.exceptions
 import keyring
 import keyring.backends.SecretService
+import pyjson5
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -35,7 +35,7 @@ def _decrypt(encrypted: str, passphrase: str) -> list[AnyDict]:
     key = kdf.derive(passphrase.encode())
     aesgcm = AESGCM(key)
     credentials_dec = aesgcm.decrypt(nonce, credentials_enc, None)
-    dec = json.loads(credentials_dec)  # type: list[AnyDict]
+    dec = pyjson5.loads(credentials_dec.decode())  # type: list[AnyDict]
     if not isinstance(dec, list):  # pragma: no cover
         raise TypeError("Unexpected data structure in input file.")
     return dec

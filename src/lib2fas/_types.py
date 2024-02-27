@@ -16,9 +16,9 @@ class OtpDetails(TypedConfig):
     Fields under the 'otp' key of the 2fas file.
     """
 
-    link: str
-    tokenType: str
-    source: str
+    link: Optional[str] = None
+    tokenType: Optional[str] = None
+    source: Optional[str] = None
     label: Optional[str] = None
     account: Optional[str] = None
     digits: Optional[int] = None
@@ -30,7 +30,7 @@ class OrderDetails(TypedConfig):
     Fields under the 'order' key of the 2fas file.
     """
 
-    position: int
+    position: int = 0
 
 
 class IconCollectionDetails(TypedConfig):
@@ -59,9 +59,9 @@ class TwoFactorAuthDetails(TypedConfig):
     secret: str
     updatedAt: int
     serviceTypeID: Optional[str]
-    otp: OtpDetails
-    order: OrderDetails
-    icon: IconDetails
+    otp: Optional[OtpDetails] = None
+    order: Optional[OrderDetails] = None
+    icon: Optional[IconDetails] = None
     groupId: Optional[str] = None  # todo: groups are currently not supported!
 
     _topt: Optional[TOTP] = None  # lazily loaded when calling .totp or .generate()

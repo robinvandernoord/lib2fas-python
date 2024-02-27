@@ -1,0 +1,35 @@
+{
+  "services": [
+    {
+      "name": "Example 1",
+      "secret": "N5LVC5JZNVVDSUZPJFIWUZSHGFDGMZJU",
+      "updatedAt": 1705504078693,
+      "otp": {
+        //"link": "otpauth://totp/Ledgy:Elon Must?secret=N5LVC5JZNVVDSUZPJFIWUZSHGFDGMZJU&issuer=Ledgy",
+        //"label": "Additional Info",
+        //"account": "Additional Info",
+        //"issuer": "Ledgy",
+        //"tokenType": "TOTP",
+        //"source": "Link"
+      },
+      "order": {
+        "position": 0
+      },
+      /*"icon": {
+        "selected": "IconCollection",
+        "label": {
+          "text": "LE",
+          "backgroundColor": "Orange"
+        },
+        "iconCollection": {
+          "id": "4d15f4f2-0c7e-41b1-a9af-be07644246c1"
+        }
+      }*/
+    },
+  ],
+  "updatedAt": 1705504226186,
+  "schemaVersion": 4,
+  "appVersionCode": 5000012,
+  "appVersionName": "5.2.0",
+  "appOrigin": "android"
+}

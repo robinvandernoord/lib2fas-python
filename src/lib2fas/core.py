@@ -2,12 +2,13 @@
 This file contains the core functionality.
 """
 
-import json
 import sys
 import typing
 from collections import defaultdict
 from pathlib import Path
 from typing import Optional
+
+import pyjson5
 
 from ._security import decrypt, keyring_manager
 from ._types import TwoFactorAuthDetails, into_class
@@ -164,7 +165,7 @@ def new_auth_storage(initial_items: list[T_TwoFactorAuthDetails] = None) -> TwoF
 
 
 def load_services(
-    filename: str, _max_retries: int = 0, passphrase: Optional[str] = None
+    filename: str | Path, _max_retries: int = 0, passphrase: Optional[str] = None
 ) -> TwoFactorStorage[TwoFactorAuthDetails]:
     """
     Given a 2fas file, try to decrypt it (via stored password in keyring or by querying user) \
@@ -180,9 +181,10 @@ def load_services(
          PermissionError on invalid password.
     """
     filepath = Path(filename).expanduser()
+
     with filepath.open() as f:
         data_raw = f.read()
-        data = json.loads(data_raw)
+        data = pyjson5.loads(data_raw)
 
     storage: TwoFactorStorage[TwoFactorAuthDetails] = new_auth_storage()
 
@@ -201,7 +203,13 @@ def load_services(
     else:
         retries = 0
         while True:
-            password = keyring_manager.retrieve_credentials(filename) or keyring_manager.save_credentials(filename)
+            # fmt: off
+            password = (
+                keyring_manager.retrieve_credentials(str(filename)) 
+                or keyring_manager.save_credentials(str(filename))
+            )
+            # fmt: on
+
             try:
                 entries = decrypt(encrypted, password)
                 storage.add(entries)
@@ -209,7 +217,7 @@ def load_services(
             except PermissionError as e:
                 retries += 1  # only really useful for pytest
                 print(e, file=sys.stderr)
-                keyring_manager.delete_credentials(filename)
+                keyring_manager.delete_credentials(str(filename))
 
                 if _max_retries and retries > _max_retries:
                     raise e
