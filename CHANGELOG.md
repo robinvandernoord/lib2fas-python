@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.4 (2024-02-28)
+
+### Fix
+
+* 'cleanup_keyring' now actually cleans up (removes old entries) ([`d072555`](https://github.com/robinvandernoord/lib2fas-python/commit/d0725551068d282658fd8767c7a13472bce9d351))
+* Make more fields optional, as in the file standard ([`5c017cd`](https://github.com/robinvandernoord/lib2fas-python/commit/5c017cd66a205e6a37fe8c395406b8047ce5cd6b))
+
+### Documentation
+
+* **changelog:** Manually updated changelog to include the new /tmp behavior ([`b81e53d`](https://github.com/robinvandernoord/lib2fas-python/commit/b81e53d746ba3b142401e585805b37632df93649))
+
 ## v0.1.3 (2024-02-20)
 
 ### Fix
