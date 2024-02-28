@@ -13,7 +13,9 @@ PASSWORD = "test"
 def clean_keyring():
     # manager classmethods without an instance will clear even active entries.
     KeyringManager.tmp_file.unlink(missing_ok=True)
-    KeyringManager._cleanup_keyring("")
+    KeyringManager._save_credentials("test", "test", "2fas:test")  # dummy insert to test next assert
+    assert KeyringManager._cleanup_keyring("")
+    assert not KeyringManager._cleanup_keyring("")  # 2nd time should be 0
 
     keyring_manager._init()
     # and also the active manager (idk why but seems necessary):
@@ -68,3 +70,7 @@ def test_reload_keyring():
 
     assert new_manager != keyring_manager
     assert new_manager.appname == keyring_manager.appname
+
+
+def test_cleanup():
+    KeyringManager._cleanup_keyring("")

@@ -20,6 +20,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from keyring.backend import KeyringBackend
+from secretstorage import Item
 
 from ._types import AnyDict, TwoFactorAuthDetails, into_class
 
@@ -138,26 +139,37 @@ class KeyringManager:
         self._delete_credentials(filename, self.appname)
 
     @classmethod
+    def _delete_item(cls, item: Item) -> None:
+        attrs = item.get_attributes()
+        old_appname = attrs["service"]
+        username = attrs["username"]
+        keyring.delete_password(old_appname, username)
+
+    @classmethod
     def _cleanup_keyring(cls, appname: str) -> int:
         kr: keyring.backends.SecretService.Keyring | KeyringBackend = keyring.get_keyring()
+
         if not hasattr(kr, "get_preferred_collection"):  # pragma: no cover
             warnings.warn(f"Can't clean up this keyring backend! {type(kr)}", category=RuntimeWarning)
             return -1
 
         collection = kr.get_preferred_collection()
 
+        old = [
+            item
+            for item in collection.get_all_items()
+            if (
+                service := item.get_attributes().get("service", "")
+            )  # must have a 'service' attribute, otherwise it's unrelated
+            and service.startswith(PREFIX)  # must be a 2fas: service, otherwise it's unrelated
+            and service != appname  # must not be the currently active session
+        ]
+
+        for item in old:
+            cls._delete_item(item)
+
         # get old 2fas: keyring items:
-        return len(
-            [
-                item
-                for item in collection.get_all_items()
-                if (
-                    service := item.get_attributes().get("service", "")
-                )  # must have a 'service' attribute, otherwise it's unrelated
-                and service.startswith(PREFIX)  # must be a 2fas: service, otherwise it's unrelated
-                and service != appname  # must not be the currently active session
-            ]
-        )
+        return len(old)
 
     def cleanup_keyring(self) -> None:
         """

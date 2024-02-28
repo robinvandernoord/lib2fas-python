@@ -205,7 +205,7 @@ def load_services(
         while True:
             # fmt: off
             password = (
-                keyring_manager.retrieve_credentials(str(filename)) 
+                keyring_manager.retrieve_credentials(str(filename))
                 or keyring_manager.save_credentials(str(filename))
             )
             # fmt: on
