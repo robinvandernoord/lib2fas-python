@@ -8,6 +8,7 @@ import hashlib
 import logging
 import tempfile
 import time
+import typing
 import warnings
 from pathlib import Path
 from typing import Any, Optional
@@ -20,9 +21,11 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from keyring.backend import KeyringBackend
-from secretstorage import Item
 
 from ._types import AnyDict, TwoFactorAuthDetails, into_class
+
+if typing.TYPE_CHECKING:  # pragma: no cover
+    from secretstorage import Item as SecretStorageItem
 
 # Suppress keyring warnings
 keyring_logger = logging.getLogger("keyring")
@@ -139,7 +142,7 @@ class KeyringManager:
         self._delete_credentials(filename, self.appname)
 
     @classmethod
-    def _delete_item(cls, item: Item) -> None:
+    def _delete_item(cls, item: "SecretStorageItem") -> None:
         attrs = item.get_attributes()
         old_appname = attrs["service"]
         username = attrs["username"]
