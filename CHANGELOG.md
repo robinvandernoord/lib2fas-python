@@ -2,6 +2,16 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.5 (2024-02-29)
+
+### Fix
+
+* Import `secretstorage` for type hinting only (because the dependency is only installed on Linux by keyring) ([`ab87e47`](https://github.com/robinvandernoord/lib2fas-python/commit/ab87e472d427cb145dd8d0cac92d7b5f780131c9))
+
+### Documentation
+
+* Added more examples in readme ([`da25c64`](https://github.com/robinvandernoord/lib2fas-python/commit/da25c64fb3052ceb96ed5529cf5a3f866b0fd491))
+
 ## v0.1.4 (2024-02-28)
 
 ### Fix
