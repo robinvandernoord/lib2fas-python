@@ -1,7 +1,7 @@
 import pytest
 
 from src.lib2fas import load_services
-from src.lib2fas._security import KeyringManager, keyring_manager
+from src.lib2fas._security import KeyringManager, DummyKeyringManager, keyring_manager
 
 from ._shared import CWD
 
@@ -74,3 +74,16 @@ def test_reload_keyring():
 
 def test_cleanup():
     KeyringManager._cleanup_keyring("")
+
+
+def test_dummy_keyring(getpass_correct):
+    dummy = DummyKeyringManager()
+
+    key = "test-dummy-keyring"
+
+    assert dummy.retrieve_credentials(key) is None
+    assert dummy.save_credentials(key) == PASSWORD
+    assert dummy.cleanup_keyring() is None  # dummy doesn't actually cleanup!
+    assert dummy.retrieve_credentials(key) == PASSWORD
+    assert dummy.delete_credentials(key) is None
+    assert dummy.retrieve_credentials(key) is None

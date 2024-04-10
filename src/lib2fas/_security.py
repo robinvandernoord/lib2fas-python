@@ -73,6 +73,10 @@ PREFIX = "2fas:"
 
 
 class KeyringManagerProtocol(typing.Protocol):
+    """
+    Abstract protocol which defines the methods the real and dummy KeyringManager classes must have.
+    """
+
     def retrieve_credentials(self, filename: str) -> Optional[str]:
         """
         Get the saved passphrase for a specific file.
@@ -95,9 +99,16 @@ class KeyringManagerProtocol(typing.Protocol):
 
 
 class DummyKeyringManager(KeyringManagerProtocol):
+    """
+    Fallback Keyring Manager which stores the passphrase in memory instead of in a keyring.
+    """
+
     __cache: dict[str, str]
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """
+        Setup the memory cache.
+        """
         self.__cache = {}
 
     def retrieve_credentials(self, filename: str) -> Optional[str]:
@@ -153,7 +164,8 @@ class KeyringManager(KeyringManagerProtocol):
         Get a KeyringManager if keyring is available, or a DummyKeyringManger otherwise.
         """
         import keyring.backends.fail
-        if isinstance(keyring.get_keyring(), keyring.backends.fail.Keyring):
+
+        if isinstance(keyring.get_keyring(), keyring.backends.fail.Keyring):  # pragma: no cover
             return DummyKeyringManager()
 
         return cls()
@@ -230,10 +242,10 @@ class KeyringManager(KeyringManagerProtocol):
             item
             for item in collection.get_all_items()
             if (
-                   service := item.get_attributes().get("service", "")
-               )  # must have a 'service' attribute, otherwise it's unrelated
-               and service.startswith(PREFIX)  # must be a 2fas: service, otherwise it's unrelated
-               and service != appname  # must not be the currently active session
+                service := item.get_attributes().get("service", "")
+            )  # must have a 'service' attribute, otherwise it's unrelated
+            and service.startswith(PREFIX)  # must be a 2fas: service, otherwise it's unrelated
+            and service != appname  # must not be the currently active session
         ]
 
         for item in old:
