@@ -2,7 +2,7 @@
 
 <!--next-version-placeholder-->
 
-## v0.1.6 (2024-04-10)
+## v0.1.7 (2024-04-10)
 
 ### Fix
 
@@ -11,6 +11,13 @@
 ### Documentation
 
 * Link to 2fas cli tool ([`791286c`](https://github.com/robinvandernoord/lib2fas-python/commit/791286c64652ccf935643e255d579cda08e0ad02))
+
+
+## v0.1.6 (2024-03-01)
+
+### Fix
+
+* Require the latest configuraptor, which includes a fix for 3.12 ([`bfae811`](https://github.com/robinvandernoord/lib2fas-python/commit/bfae811e0fdf46b0f9c80b823bbe020900740ed0))
 
 ## v0.1.5 (2024-02-29)
 

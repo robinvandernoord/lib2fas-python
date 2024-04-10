@@ -25,7 +25,7 @@ classifiers = [
 
 dependencies = [
     "cryptography",
-    "configuraptor>=1.25",
+    "configuraptor>=1.26.1",
     "PyOTP",
     "keyring",
     "rapidfuzz",
