@@ -4,10 +4,6 @@
 
 ## v0.1.7 (2024-04-10)
 
-
-
-## v0.1.7 (2024-04-10)
-
 ### Fix
 
 * Don't crash on missing (supported) keyring ([`2624e2a`](https://github.com/robinvandernoord/lib2fas-python/commit/2624e2a216adff37a76ab16e215d7829d5ffef64))
