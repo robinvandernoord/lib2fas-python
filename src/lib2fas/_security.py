@@ -72,7 +72,64 @@ def hash_string(data: Any) -> str:
 PREFIX = "2fas:"
 
 
-class KeyringManager:
+class KeyringManagerProtocol(typing.Protocol):
+    def retrieve_credentials(self, filename: str) -> Optional[str]:
+        """
+        Get the saved passphrase for a specific file.
+        """
+
+    def save_credentials(self, filename: str) -> str:
+        """
+        Query the user for a passphrase and store it in the keyring.
+        """
+
+    def delete_credentials(self, filename: str) -> None:
+        """
+        Remove a stored passphrase for a file.
+        """
+
+    def cleanup_keyring(self) -> None:
+        """
+        Remove all old items from the keyring.
+        """
+
+
+class DummyKeyringManager(KeyringManagerProtocol):
+    __cache: dict[str, str]
+
+    def __init__(self):
+        self.__cache = {}
+
+    def retrieve_credentials(self, filename: str) -> Optional[str]:
+        """
+        Get the saved passphrase for a specific file.
+        """
+        return self.__cache.get(filename, None)
+
+    def save_credentials(self, filename: str) -> str:
+        """
+        Query the user for a passphrase and store it in the keyring.
+        """
+        value = getpass.getpass(f"Passphrase for '{filename}'? ")
+        self.__cache[filename] = value
+        return value
+
+    def delete_credentials(self, filename: str) -> None:
+        """
+        Remove a stored passphrase for a file.
+        """
+        self.__cache.pop(filename, None)
+        return None
+
+    def cleanup_keyring(self) -> None:
+        """
+        Remove all old items from the keyring.
+        """
+        # self.__cache.clear() # disable to prevent double prompting
+        return None
+
+
+class KeyringManager(KeyringManagerProtocol):
     """
     Makes working with the keyring a bit easier.
 
@@ -89,6 +146,17 @@ class KeyringManager:
         See _init.
         """
         self._init()
+
+    @classmethod
+    def or_dummy(cls) -> KeyringManagerProtocol:
+        """
+        Get a KeyringManager if keyring is available, or a DummyKeyringManger otherwise.
+        """
+        import keyring.backends.fail
+        if isinstance(keyring.get_keyring(), keyring.backends.fail.Keyring):
+            return DummyKeyringManager()
+
+        return cls()
 
     def _init(self) -> None:
         """
@@ -162,10 +230,10 @@ class KeyringManager:
             item
             for item in collection.get_all_items()
             if (
-                service := item.get_attributes().get("service", "")
-            )  # must have a 'service' attribute, otherwise it's unrelated
-            and service.startswith(PREFIX)  # must be a 2fas: service, otherwise it's unrelated
-            and service != appname  # must not be the currently active session
+                   service := item.get_attributes().get("service", "")
+               )  # must have a 'service' attribute, otherwise it's unrelated
+               and service.startswith(PREFIX)  # must be a 2fas: service, otherwise it's unrelated
+               and service != appname  # must not be the currently active session
         ]
 
         for item in old:
@@ -181,4 +249,4 @@ class KeyringManager:
         self._cleanup_keyring(self.appname)
 
 
-keyring_manager = KeyringManager()
+keyring_manager = KeyringManager.or_dummy()
