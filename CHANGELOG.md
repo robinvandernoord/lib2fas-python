@@ -2,6 +2,16 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.6 (2024-04-10)
+
+### Fix
+
+* Don't crash on missing (supported) keyring ([`2624e2a`](https://github.com/robinvandernoord/lib2fas-python/commit/2624e2a216adff37a76ab16e215d7829d5ffef64))
+
+### Documentation
+
+* Link to 2fas cli tool ([`791286c`](https://github.com/robinvandernoord/lib2fas-python/commit/791286c64652ccf935643e255d579cda08e0ad02))
+
 ## v0.1.5 (2024-02-29)
 
 ### Fix
