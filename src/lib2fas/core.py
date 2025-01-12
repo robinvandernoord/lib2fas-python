@@ -166,7 +166,7 @@ def new_auth_storage(initial_items: list[T_TwoFactorAuthDetails] = None) -> TwoF
 
 def load_services(
     filename: str | Path, _max_retries: int = 0, passphrase: Optional[str] = None
-) -> TwoFactorStorage[TwoFactorAuthDetails]:
+) -> TwoFactorStorage[TwoFactorAuthDetails] | None:
     """
     Given a 2fas file, try to decrypt it (via stored password in keyring or by querying user) \
      and load into a TwoFactorStorage object.
@@ -177,10 +177,16 @@ def load_services(
          passphrase: password for the supplied 2fas file; leave empty to query the user.
             Note: when using the passphrase option, _max_retries is ignored and the keyring is not used.
 
+    Returns:
+        A TwoFactorStorage instance, or None if e.g. the requested .2fas file does not exist.
+
     Raises:
          PermissionError on invalid password.
     """
     filepath = Path(filename).expanduser()
+
+    if not filepath.exists():
+        return None
 
     with filepath.open() as f:
         data_raw = f.read()

@@ -39,6 +39,8 @@ def getpass_empty(monkeypatch):
     """Did the file we wrote actually become json."""
     monkeypatch.setattr("getpass.getpass", lambda _: "")
 
+def test_file_missing():
+    assert load_services("/tmp/fake_file_for_test_file_missing.2fas", _max_retries=1) is None
 
 def test_wrong_pass(getpass_wrong):
     with pytest.raises(PermissionError):
