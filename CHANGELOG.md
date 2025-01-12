@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.8 (2025-01-12)
+
+### Fix
+
+* Return None for load_services if file doesn't exist instead of an exception ([`41a01a3`](https://github.com/robinvandernoord/lib2fas-python/commit/41a01a3c87364bd4fc251749e9de28e611e7617c))
+
 ## v0.1.7 (2024-04-10)
 
 ### Fix
