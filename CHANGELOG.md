@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.9 (2025-02-27)
+
+### Fix
+
+* Warn instead of crash if keyring is locked ([`2407a14`](https://github.com/robinvandernoord/lib2fas-python/commit/2407a14a072912e4945eabe177ea150fd7a03cc4))
+
 ## v0.1.8 (2025-01-12)
 
 ### Fix
