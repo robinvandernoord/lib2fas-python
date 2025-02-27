@@ -1,7 +1,7 @@
 import pytest
 
 from src.lib2fas import load_services
-from src.lib2fas._security import KeyringManager, DummyKeyringManager, keyring_manager
+from src.lib2fas._security import DummyKeyringManager, KeyringManager, keyring_manager
 
 from ._shared import CWD
 
@@ -39,8 +39,10 @@ def getpass_empty(monkeypatch):
     """Did the file we wrote actually become json."""
     monkeypatch.setattr("getpass.getpass", lambda _: "")
 
+
 def test_file_missing():
     assert load_services("/tmp/fake_file_for_test_file_missing.2fas", _max_retries=1) is None
+
 
 def test_wrong_pass(getpass_wrong):
     with pytest.raises(PermissionError):
@@ -85,7 +87,7 @@ def test_dummy_keyring(getpass_correct):
 
     assert dummy.retrieve_credentials(key) is None
     assert dummy.save_credentials(key) == PASSWORD
-    assert dummy.cleanup_keyring() is None  # dummy doesn't actually cleanup!
+    assert dummy.cleanup_keyring() == -1  # dummy doesn't actually cleanup!
     assert dummy.retrieve_credentials(key) == PASSWORD
     assert dummy.delete_credentials(key) is None
     assert dummy.retrieve_credentials(key) is None

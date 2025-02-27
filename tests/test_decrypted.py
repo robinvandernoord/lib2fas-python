@@ -62,18 +62,15 @@ def test_load(services):
     assert example_2.generate_int() == int(example_2.generate())
 
 
-
 def test_minimal():
     data = load_services(CWD / "2fas-demo-minimal.2fas")
 
-    entry = data['example 1'][0]
+    entry = data["example 1"][0]
 
     assert entry
     assert entry.generate() == entry.generate()
 
-    print(
-        repr(entry)
-    )
+    print(repr(entry))
 
 
 def test_search_exact(services):

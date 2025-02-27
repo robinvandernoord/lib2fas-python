@@ -6,6 +6,7 @@ import base64
 import getpass
 import hashlib
 import logging
+import sys
 import tempfile
 import time
 import typing
@@ -21,6 +22,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.hashes import SHA256
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from keyring.backend import KeyringBackend
+from keyring.errors import KeyringError
 
 from ._types import AnyDict, TwoFactorAuthDetails, into_class
 
@@ -92,7 +94,7 @@ class KeyringManagerProtocol(typing.Protocol):
         Remove a stored passphrase for a file.
         """
 
-    def cleanup_keyring(self) -> None:
+    def cleanup_keyring(self) -> int:
         """
         Remove all old items from the keyring.
         """
@@ -132,12 +134,12 @@ class DummyKeyringManager(KeyringManagerProtocol):
         self.__cache.pop(filename, None)
         return None
 
-    def cleanup_keyring(self) -> None:
+    def cleanup_keyring(self) -> int:
         """
         Remove all old items from the keyring.
         """
         # self.__cache.clear() # disable to prevent double prompting
-        return None
+        return -1
 
 
 class KeyringManager(KeyringManagerProtocol):
@@ -165,7 +167,9 @@ class KeyringManager(KeyringManagerProtocol):
         """
         import keyring.backends.fail
 
-        if isinstance(keyring.get_keyring(), keyring.backends.fail.Keyring):  # pragma: no cover
+        kr = keyring.get_keyring()
+
+        if isinstance(kr, keyring.backends.fail.Keyring):  # pragma: no cover
             return DummyKeyringManager()
 
         return cls()
@@ -196,7 +200,11 @@ class KeyringManager(KeyringManagerProtocol):
         """
         Get the saved passphrase for a specific file.
         """
-        return self._retrieve_credentials(filename, self.appname)
+        try:
+            return self._retrieve_credentials(filename, self.appname)
+        except KeyringError as e:
+            print(f"Keyring failing: {e}", file=sys.stderr)
+            return None
 
     @classmethod
     def _save_credentials(cls, filename: str, passphrase: str, appname: str) -> None:
@@ -207,7 +215,10 @@ class KeyringManager(KeyringManagerProtocol):
         Query the user for a passphrase and store it in the keyring.
         """
         passphrase = getpass.getpass(f"Passphrase for '{filename}'? ")
-        self._save_credentials(filename, passphrase, self.appname)
+        try:
+            self._save_credentials(filename, passphrase, self.appname)
+        except KeyringError as e:  # pragma: no cover
+            print(f"Keyring failing: {e}", file=sys.stderr)
 
         return passphrase
 
@@ -219,7 +230,10 @@ class KeyringManager(KeyringManagerProtocol):
         """
         Remove a stored passphrase for a file.
         """
-        self._delete_credentials(filename, self.appname)
+        try:
+            self._delete_credentials(filename, self.appname)
+        except KeyringError as e:  # pragma: no cover
+            print(f"Keyring failing: {e}", file=sys.stderr)
 
     @classmethod
     def _delete_item(cls, item: "SecretStorageItem") -> None:
@@ -254,11 +268,15 @@ class KeyringManager(KeyringManagerProtocol):
         # get old 2fas: keyring items:
         return len(old)
 
-    def cleanup_keyring(self) -> None:
+    def cleanup_keyring(self) -> int:
         """
         Remove all old items from the keyring.
         """
-        self._cleanup_keyring(self.appname)
+        try:
+            return self._cleanup_keyring(self.appname)
+        except KeyringError as e:  # pragma: no cover
+            print(f"Keyring failing: {e}", file=sys.stderr)
+            return -1
 
 
 keyring_manager = KeyringManager.or_dummy()
