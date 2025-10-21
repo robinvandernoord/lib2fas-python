@@ -2,6 +2,12 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.10 (2025-10-21)
+
+### Documentation
+
+* Support python 3.14; drop python 3.10 ([`ff16e5e`](https://github.com/robinvandernoord/lib2fas-python/commit/ff16e5e2dab94ebd17718b9c612514254f17acd4))
+
 ## v0.1.9 (2025-02-27)
 
 ### Fix
